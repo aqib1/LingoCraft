@@ -1,2 +1,2 @@
 # LingoCraft
-Micro-service for languge detection and translation
+Microservice for language detection and translation
