@@ -8,7 +8,7 @@ plugins {
     id("nu.studer.jooq") version "8.2.1"
 }
 
-group = "com.diabolocom.release.migration"
+group = "com.lingo.craft.main"
 version = "0.0.1"
 
 java {
@@ -131,9 +131,9 @@ jooq {
                 logging = Logging.WARN
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
-                    url = "jdbc:postgresql://localhost:6432/diabolocom_migration_v2"
-                    user = "jooq_read"
-                    password = "jooq_read"
+                    url = "jdbc:postgresql://localhost:6432/lingo_craft"
+                    user = "lingo_read"
+                    password = "lingo_read"
                 }
                 generator.apply {
                     database.apply {
@@ -141,7 +141,7 @@ jooq {
                         // Add additional configurations specific to PostgreSQL if needed
                     }
                     target.apply {
-                        packageName = "com.diabolocom.release.migration"
+                        packageName = "com.lingo.craft.main"
                         directory = "src/main/jooq"
                     }
 
