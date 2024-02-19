@@ -1,0 +1,7 @@
+openapi: 3.0.0
+info:
+  title: Lingo Craft API
+  version: 0.0.1
+servers:
+  - url: /lingo-craft/v1
+    description: Lingo Craft APIs
