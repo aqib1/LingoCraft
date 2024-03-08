@@ -5,3 +5,73 @@ info:
 servers:
   - url: /lingo-craft/v1
     description: Lingo Craft APIs
+paths:
+  /user:
+    post:
+      summary: Create a new user.
+      operationId: createUser
+      description: This endpoint will generate a new user in our system.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '200':
+          description: New User is created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+
+        '400':
+          description: Bad request, check request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        roleId:
+          type: integer
+      required:
+        - name
+        - password
+        - email
+        - phone
+        - roleId
+
+    CreateUserResponse:
+      allOf:
+        - $ref: '#/components/schemas/CreateUserRequest'
+        - type: object
+          properties:
+            id:
+             type: string
+          required:
+            - id
+
+    ErrorResponse:
+      type: object
+      properties:
+        errorMessage:
+          type: string
+          description: Error message details.
