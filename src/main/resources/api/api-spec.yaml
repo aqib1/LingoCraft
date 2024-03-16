@@ -50,6 +50,13 @@ components:
           type: string
         phone:
           type: string
+        age:
+          type: integer
+        gender:
+          type: string
+          enum:
+            - MALE
+            - FEMALE
         roleId:
           type: integer
       required:
@@ -57,6 +64,8 @@ components:
         - password
         - email
         - phone
+        - age
+        - gender
         - roleId
 
     CreateUserResponse:

@@ -1,0 +1,20 @@
+## CREATE USER
+POST {{host}}/user
+Content-Type: application/json
+
+{
+  "name": "aqib",
+  "password": "temp/123",
+  "email": "aqibbutt3078@gmail.com",
+  "phone": "+923237811992",
+  "age": 31,
+  "gender": "MALE",
+  "roleId": 1
+}
+
+
+> {%
+    client.test("Test status code", function () {
+        client.assert(response.status == 200, "Response status is not 200")
+    });
+ %}
