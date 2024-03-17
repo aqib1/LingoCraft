@@ -4,6 +4,7 @@ import com.lingo.craft.domain.user.model.UserModel;
 import com.lingo.craft.domain.user.ports.outbound.UserRepository;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,19 @@ public class JdbcUserRepository implements UserRepository {
             .set(userRecordMapper.toUserRecord(model))
             .returning()
             .fetchAny();
+        return Objects.isNull(userRecord) ?
+            Optional.empty() :
+            Optional.of(
+                userRecordMapper.toUserModel(userRecord)
+            );
+    }
+
+    @Override
+    public Optional<UserModel> getById(UUID id) {
+        var userRecord = dslContext.selectFrom(USER)
+            .where(USER.ID.eq(id))
+            .fetchOne();
+
         return Objects.isNull(userRecord) ?
             Optional.empty() :
             Optional.of(

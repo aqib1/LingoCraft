@@ -3,6 +3,7 @@ package com.lingo.craft.adapters.inbound.user;
 import com.lingo.craft.domain.user.model.UserModel;
 import com.diabolocom.release.openapi.model.CreateUserRequest;
 import com.diabolocom.release.openapi.model.CreateUserResponse;
+import com.diabolocom.release.openapi.model.GetUserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -15,6 +16,9 @@ public interface UserModelMapper {
 
     @Mapping(target = "id", expression = "java(getStringIdFromUUID(model))")
     CreateUserResponse toCreateUserResponse(UserModel model);
+
+    @Mapping(target = "id", expression = "java(getStringIdFromUUID(model))")
+    GetUserResponse toGetUserResponse(UserModel model);
 
     default String getGenderValue(CreateUserRequest request) {
         return request.getGender().name();
