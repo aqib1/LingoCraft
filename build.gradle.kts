@@ -15,6 +15,8 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
 
+val springCloudVersion by extra("2023.0.0")
+
 repositories {
     mavenLocal()
     mavenCentral()
@@ -23,6 +25,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-jooq")
@@ -47,6 +50,11 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:1.19.3")
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+    }
+}
 
 tasks.withType<Test> {
     useJUnitPlatform()
@@ -131,9 +139,9 @@ jooq {
                 logging = Logging.WARN
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
-                    url = "jdbc:postgresql://localhost:5432/lingo_craft"
-                    user = "postgres"
-                    password = "admin"
+                    url = "jdbc:postgresql://localhost:6432/lingo_craft"
+                    user = "lingo_read"
+                    password = "lingo_read"
                 }
                 generator.apply {
                     database.apply {
@@ -141,7 +149,7 @@ jooq {
                         // Add additional configurations specific to PostgreSQL if needed
                     }
                     target.apply {
-                        packageName = "com.lingo.craft.main"
+                        packageName = "com.lingo.craft"
                         directory = "src/main/jooq"
                     }
 
@@ -153,6 +161,6 @@ jooq {
 
 tasks.bootJar {
     destinationDirectory.set(file("docker-dir"))
-    archiveFileName.set("release-migration.jar")
+    archiveFileName.set("lingo_craft.jar")
     enabled = true
 }
