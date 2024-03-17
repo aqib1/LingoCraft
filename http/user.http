@@ -17,4 +17,15 @@ Content-Type: application/json
     client.test("Test status code", function () {
         client.assert(response.status == 200, "Response status is not 200")
     });
+    client.global.set("user_id", response.body.id)
  %}
+
+###
+## GET USER BY ID
+GET {{host}}/user/{{user_id}}
+
+> {%
+    client.test("Test status code", function () {
+        client.assert(response.status == 200, "Response status is not 200")
+    });
+%}

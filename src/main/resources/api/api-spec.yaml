@@ -6,6 +6,39 @@ servers:
   - url: /lingo-craft/v1
     description: Lingo Craft APIs
 paths:
+  /user/{id}:
+    get:
+      summary: Get a user by its id.
+      operationId: getUserById
+      description: This endpoint will get an existing user from our system.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of existing user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Got User by id successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserResponse'
+
+        '400':
+          description: Bad request, check request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /user:
     post:
       summary: Create a new user.
@@ -77,6 +110,10 @@ components:
              type: string
           required:
             - id
+
+    GetUserResponse:
+      allOf:
+        - $ref: '#/components/schemas/CreateUserResponse'
 
     ErrorResponse:
       type: object
