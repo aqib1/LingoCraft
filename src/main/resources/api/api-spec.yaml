@@ -38,6 +38,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /user/email/{email}/password/{password}:
+    get:
+      summary: Get a user by email and password.
+      operationId: getUserByEmailPassword
+      description: This endpoint will get an existing user from our system.
+      parameters:
+        - name: email
+          in: path
+          required: true
+          description: email of existing user
+          schema:
+            type: string
+        - name: password
+          in: path
+          required: true
+          description: password of existing user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Got User by email and password successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserResponse'
+
+        '400':
+          description: Bad request, check request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /user:
     post:

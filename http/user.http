@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "aqib",
-  "password": "temp/123",
+  "password": "temp123",
   "email": "aqibbutt3078@gmail.com",
   "phone": "+923237811992",
   "age": 31,
@@ -18,11 +18,22 @@ Content-Type: application/json
         client.assert(response.status == 200, "Response status is not 200")
     });
     client.global.set("user_id", response.body.id)
+    client.global.set("user_email", response.body.email)
+    client.global.set("user_password", response.body.password)
  %}
 
 ###
 ## GET USER BY ID
 GET {{host}}/user/{{user_id}}
+
+> {%
+    client.test("Test status code", function () {
+        client.assert(response.status == 200, "Response status is not 200")
+    });
+%}
+###
+
+GET {{host}}/user/email/{{user_email}}/password/{{user_password}}
 
 > {%
     client.test("Test status code", function () {
