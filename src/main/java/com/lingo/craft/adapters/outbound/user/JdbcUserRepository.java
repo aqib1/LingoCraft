@@ -52,6 +52,24 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
+    public  Optional<UserModel> deleteById(UUID id){
+        var userRecord = dslContext.selectFrom(USER)
+                .where(USER.ID.eq(id))
+                .fetchOne();
+
+        if (Objects.isNull(userRecord)){
+            return Optional.empty();
+        } else{
+            dslContext.deleteFrom(USER)
+                    .where(USER.ID.eq(id))
+                    .execute();
+
+            return Optional.of(userRecordMapper.toUserModel(userRecord));
+        }
+    }
+
+
+    @Override
     public Optional<UserModel> getByEmailPassword(String email, String password) {
         var userRecord = dslContext.selectFrom(USER)
                 .where(USER.EMAIL.eq(email),USER.PASSWORD.eq(password))

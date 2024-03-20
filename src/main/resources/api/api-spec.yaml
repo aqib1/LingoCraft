@@ -38,6 +38,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete a user by its id.
+      operationId: deleteUserById
+      description: This endpoint will delete an existing user from our system.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of existing user
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted successfully.
+        '400':
+          description: Bad request, check request payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /user/email/{email}/password/{password}:
     get:
       summary: Get a user by email and password.

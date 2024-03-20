@@ -2,12 +2,7 @@ package com.lingo.craft.adapters.inbound.user;
 
 import com.lingo.craft.domain.user.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.diabolocom.release.openapi.model.CreateUserRequest;
 import com.diabolocom.release.openapi.model.CreateUserResponse;
 import com.diabolocom.release.openapi.model.GetUserResponse;
@@ -34,6 +29,16 @@ public class UserController {
             userModelMapper.toGetUserResponse(
                 userService.getUserById(id)
             )
+        );
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GetUserResponse> deleteUserById(
+            @PathVariable String id
+    ){
+        return  ResponseEntity.ok(
+                userModelMapper.toDeleteUserByIdResponse(
+                        userService.deleteById(id)
+                )
         );
     }
     @GetMapping("/email/{email}/password/{password}")

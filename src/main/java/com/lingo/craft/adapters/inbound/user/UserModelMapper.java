@@ -20,6 +20,10 @@ public interface UserModelMapper {
     @Mapping(target = "id", expression = "java(getStringIdFromUUID(model))")
     GetUserResponse toGetUserResponse(UserModel model);
 
+    @Mapping(target = "id", expression = "java(getStringIdFromUUID(model))")
+    GetUserResponse toDeleteUserByIdResponse(UserModel model);
+
+
     default String getGenderValue(CreateUserRequest request) {
         return request.getGender().name();
     }

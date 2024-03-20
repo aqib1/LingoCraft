@@ -50,6 +50,35 @@ public class UserService {
             );
         }
     }
+    public UserModel deleteById(String id) {
+        try{
+            var uuid = UUID.fromString(id);
+            var optionalUser = userRepository.getById(uuid);
+
+            if (optionalUser.isEmpty()) {
+                throw new UserNotFoundException(
+                        HttpStatus.NOT_FOUND,
+                        String.format(
+                                "User not found against id = {%s}",
+                                id
+                        )
+                );
+            }
+
+            return optionalUser.get();
+
+        } catch (IllegalArgumentException ex) {
+            throw new InvalidUserIdException(
+                    HttpStatus.BAD_REQUEST,
+                    String.format(
+                            "User id {%s} is not in UUID format",
+                            id
+                    ),
+                    ex
+            );
+        }
+    }
+
     public UserModel getUserByEmailPassword(String email, String password) {
         try {
 
