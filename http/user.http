@@ -32,6 +32,21 @@ GET {{host}}/user/{{user_id}}
     });
 %}
 ###
+## DELETE USER BY ID
+DELETE {{host}}/user/{{user_id}}
+
+> {%
+    client.test("Test delete user by ID", function () {
+        client.test(
+            "{{host}}/user/{{user_id}}",
+            function (response, done) {
+                client.assert(response.status == 204, "Response status is not 204");
+                done();
+            }
+        );
+    });
+%}
+###
 
 GET {{host}}/user/email/{{user_email}}/password/{{user_password}}
 
@@ -40,3 +55,4 @@ GET {{host}}/user/email/{{user_email}}/password/{{user_password}}
         client.assert(response.status == 200, "Response status is not 200")
     });
 %}
+
