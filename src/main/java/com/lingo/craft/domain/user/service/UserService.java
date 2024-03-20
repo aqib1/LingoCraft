@@ -5,7 +5,10 @@ import com.lingo.craft.domain.user.exception.UserCreationException;
 import com.lingo.craft.domain.user.exception.UserNotFoundException;
 import com.lingo.craft.domain.user.model.UserModel;
 import com.lingo.craft.domain.user.ports.outbound.UserRepository;
+
+import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,8 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+
 
     public UserModel getUserById(String id) {
         try {
@@ -42,6 +47,34 @@ public class UserService {
                     id
                 ),
                 ex
+            );
+        }
+    }
+    public UserModel getUserByEmailPassword(String email, String password) {
+        try {
+
+            var optionalUser = userRepository.getByEmailPassword(email,password);
+
+            if (optionalUser.isEmpty()) {
+                throw new UserNotFoundException(
+                        HttpStatus.NOT_FOUND,
+                        String.format(
+                                "User not found against email = {%s}",
+                                email
+                        )
+                );
+            }
+
+            return optionalUser.get();
+
+        } catch (IllegalArgumentException ex) {
+            throw new InvalidUserIdException(
+                    HttpStatus.BAD_REQUEST,
+                    String.format(
+                            "Email id {%s} is not Valid",
+                            email
+                    ),
+                    ex
             );
         }
     }

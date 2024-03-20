@@ -13,4 +13,5 @@ public interface UserRecordMapper {
 
     @Mapping(target = "roleId", source = "roleid")
     UserModel toUserModel(UserRecord userRecord);
+
 }

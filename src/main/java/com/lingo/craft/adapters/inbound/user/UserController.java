@@ -36,6 +36,17 @@ public class UserController {
             )
         );
     }
+    @GetMapping("/email/{email}/password/{password}")
+    public ResponseEntity<GetUserResponse> getByEmailPassword(
+            @PathVariable String email,
+            @PathVariable String password
+    ) {
+        return ResponseEntity.ok(
+                userModelMapper.toGetUserResponse(
+                        userService.getUserByEmailPassword(email, password)
+                )
+        );
+    }
 
     @PostMapping
     public ResponseEntity<CreateUserResponse> createUser(

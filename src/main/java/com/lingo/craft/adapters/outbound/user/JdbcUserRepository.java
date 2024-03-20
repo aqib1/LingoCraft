@@ -50,4 +50,17 @@ public class JdbcUserRepository implements UserRepository {
                 userRecordMapper.toUserModel(userRecord)
             );
     }
+
+    @Override
+    public Optional<UserModel> getByEmailPassword(String email, String password) {
+        var userRecord = dslContext.selectFrom(USER)
+                .where(USER.EMAIL.eq(email),USER.PASSWORD.eq(password))
+                .fetchOne();
+
+        return Objects.isNull(userRecord) ?
+                Optional.empty() :
+                Optional.of(
+                        userRecordMapper.toUserModel(userRecord)
+                );
+    }
 }
