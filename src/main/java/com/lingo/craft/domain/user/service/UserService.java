@@ -53,7 +53,7 @@ public class UserService {
     public UserModel deleteById(String id) {
         try{
             var uuid = UUID.fromString(id);
-            var optionalUser = userRepository.getById(uuid);
+            var optionalUser = userRepository.deleteById(uuid);
 
             if (optionalUser.isEmpty()) {
                 throw new UserNotFoundException(
