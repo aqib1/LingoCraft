@@ -53,9 +53,12 @@ public class UserService {
     public UserModel deleteById(String id) {
         try{
             var uuid = UUID.fromString(id);
-            var optionalUser = userRepository.deleteById(uuid);
 
-            if (optionalUser.isEmpty()) {
+            getUserById(id);
+
+            var optionalDeleteUser = userRepository.deleteById(uuid);
+
+            if (optionalDeleteUser.isEmpty()) {
                 throw new UserNotFoundException(
                         HttpStatus.NOT_FOUND,
                         String.format(
@@ -65,7 +68,7 @@ public class UserService {
                 );
             }
 
-            return optionalUser.get();
+            return optionalDeleteUser.get();
 
         } catch (IllegalArgumentException ex) {
             throw new InvalidUserIdException(

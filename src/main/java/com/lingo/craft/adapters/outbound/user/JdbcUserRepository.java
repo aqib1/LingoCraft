@@ -39,6 +39,7 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
+    @Transactional
     public Optional<UserModel> getById(UUID id) {
         var userRecord = dslContext.selectFrom(USER)
             .where(USER.ID.eq(id))
@@ -52,6 +53,7 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
+    @Transactional
     public  Optional<UserModel> deleteById(UUID id){
         var userRecord = dslContext.selectFrom(USER)
                 .where(USER.ID.eq(id))
@@ -70,6 +72,7 @@ public class JdbcUserRepository implements UserRepository {
 
 
     @Override
+    @Transactional
     public Optional<UserModel> getByEmailPassword(String email, String password) {
         var userRecord = dslContext.selectFrom(USER)
                 .where(USER.EMAIL.eq(email),USER.PASSWORD.eq(password))

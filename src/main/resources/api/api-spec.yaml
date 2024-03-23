@@ -51,8 +51,12 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        '200':
           description: User deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteUserResponse'
         '400':
           description: Bad request, check request payload.
           content:
@@ -179,6 +183,10 @@ components:
     GetUserResponse:
       allOf:
         - $ref: '#/components/schemas/CreateUserResponse'
+
+    DeleteUserResponse:
+      allOf:
+        - $ref: '#/components/schemas/GetUserResponse'
 
     ErrorResponse:
       type: object
