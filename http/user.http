@@ -1,4 +1,4 @@
-## CREATE USER
+## Create user
 POST {{host}}/user
 Content-Type: application/json
 
@@ -20,10 +20,10 @@ Content-Type: application/json
     client.global.set("user_id", response.body.id)
     client.global.set("user_email", response.body.email)
     client.global.set("user_password", response.body.password)
- %}
+%}
 
 ###
-## GET USER BY ID
+## Get user by id
 GET {{host}}/user/{{user_id}}
 
 > {%
@@ -31,18 +31,19 @@ GET {{host}}/user/{{user_id}}
         client.assert(response.status == 200, "Response status is not 200")
     });
 %}
+
 ###
-## DELETE USER BY ID
+## Delete user by id
 DELETE {{host}}/user/{{user_id}}
 
 > {%
-    client.test("Test delete user by ID", function (response, done) {
-        client.assert(response.status == 204, "Response status is not 204");
-        done();
+    client.test("Test delete user by ID", function () {
+        client.assert(response.status == 200, "Response status is not 200");
     });
 %}
-###
 
+###
+## Get user by email and password
 GET {{host}}/user/email/{{user_email}}/password/{{user_password}}
 
 > {%
