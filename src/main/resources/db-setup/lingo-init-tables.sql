@@ -11,3 +11,8 @@ CREATE TABLE public.user
     gender varchar(50)          NOT NULL,
     roleId integer              NOT NULL
 );
+
+CREATE TABLE public.role(
+    id uuid PRIMARY KEY,
+    rolePermissions varchar(255)
+);

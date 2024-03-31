@@ -5,8 +5,9 @@ WHERE pg_stat_activity.datname = 'lingo_craft' -- ← change this to your DB
 
 
 DROP DATABASE lingo_craft;
-DROP OWNED BY lingo_owner;
-DROP ROLE lingo_owner;
-DROP OWNED BY lingo_read;
-DROP ROLE lingo_read;
+-- DROP OWNED BY lingo_owner;
+-- DROP ROLE lingo_owner;
+-- DROP OWNED BY lingo_read;
+-- DROP ROLE lingo_read;
 DROP TABLE public.user;
+DROP TABLE public.role;
