@@ -4,6 +4,7 @@ import com.lingo.craft.domain.user.model.UserModel;
 import com.diabolocom.release.openapi.model.CreateUserRequest;
 import com.diabolocom.release.openapi.model.CreateUserResponse;
 import com.diabolocom.release.openapi.model.GetUserResponse;
+import com.diabolocom.release.openapi.model.DeleteUserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,7 +22,7 @@ public interface UserModelMapper {
     GetUserResponse toGetUserResponse(UserModel model);
 
     @Mapping(target = "id", expression = "java(getStringIdFromUUID(model))")
-    GetUserResponse toDeleteUserByIdResponse(UserModel model);
+    DeleteUserResponse toDeleteUserByIdResponse(UserModel model);
 
 
     default String getGenderValue(CreateUserRequest request) {

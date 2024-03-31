@@ -36,14 +36,9 @@ GET {{host}}/user/{{user_id}}
 DELETE {{host}}/user/{{user_id}}
 
 > {%
-    client.test("Test delete user by ID", function () {
-        client.test(
-            "{{host}}/user/{{user_id}}",
-            function (response, done) {
-                client.assert(response.status == 204, "Response status is not 204");
-                done();
-            }
-        );
+    client.test("Test delete user by ID", function (response, done) {
+        client.assert(response.status == 204, "Response status is not 204");
+        done();
     });
 %}
 ###

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import com.diabolocom.release.openapi.model.CreateUserRequest;
 import com.diabolocom.release.openapi.model.CreateUserResponse;
 import com.diabolocom.release.openapi.model.GetUserResponse;
+import com.diabolocom.release.openapi.model.DeleteUserResponse;
 
 @RestController
 @RequestMapping("/user")
@@ -32,7 +33,7 @@ public class UserController {
         );
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<GetUserResponse> deleteUserById(
+    public ResponseEntity<DeleteUserResponse> deleteUserById(
             @PathVariable String id
     ){
         return  ResponseEntity.ok(
