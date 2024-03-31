@@ -2,6 +2,7 @@ package com.lingo.craft.domain.user.service;
 
 import com.lingo.craft.domain.user.exception.InvalidUserIdException;
 import com.lingo.craft.domain.user.exception.UserCreationException;
+import com.lingo.craft.domain.user.exception.UserDeletionException;
 import com.lingo.craft.domain.user.exception.UserNotFoundException;
 import com.lingo.craft.domain.user.model.UserModel;
 import com.lingo.craft.domain.user.ports.outbound.UserRepository;
@@ -9,6 +10,7 @@ import com.lingo.craft.domain.user.ports.outbound.UserRepository;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.jooq.exception.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,6 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
 
 
     public UserModel getUserById(String id) {
@@ -50,34 +51,35 @@ public class UserService {
             );
         }
     }
+
     public UserModel deleteById(String id) {
-        try{
+        try {
             var uuid = UUID.fromString(id);
 
-            getUserById(id);
+            var existingUser = getUserById(id);
 
-            var optionalDeleteUser = userRepository.deleteById(uuid);
-
-            if (optionalDeleteUser.isEmpty()) {
-                throw new UserNotFoundException(
-                        HttpStatus.NOT_FOUND,
-                        String.format(
-                                "User not found against id = {%s}",
-                                id
-                        )
+            try {
+                userRepository.deleteById(uuid);
+            } catch (DataAccessException exception) {
+                throw new UserDeletionException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    String.format(
+                        "User deletion failed against id = {%s}",
+                        id
+                    ),
+                    exception
                 );
             }
 
-            return optionalDeleteUser.get();
-
+            return existingUser;
         } catch (IllegalArgumentException ex) {
             throw new InvalidUserIdException(
-                    HttpStatus.BAD_REQUEST,
-                    String.format(
-                            "User id {%s} is not in UUID format",
-                            id
-                    ),
-                    ex
+                HttpStatus.BAD_REQUEST,
+                String.format(
+                    "User id {%s} is not in UUID format",
+                    id
+                ),
+                ex
             );
         }
     }
@@ -85,15 +87,15 @@ public class UserService {
     public UserModel getUserByEmailPassword(String email, String password) {
         try {
 
-            var optionalUser = userRepository.getByEmailPassword(email,password);
+            var optionalUser = userRepository.getByEmailPassword(email, password);
 
             if (optionalUser.isEmpty()) {
                 throw new UserNotFoundException(
-                        HttpStatus.NOT_FOUND,
-                        String.format(
-                                "User not found against email = {%s}",
-                                email
-                        )
+                    HttpStatus.NOT_FOUND,
+                    String.format(
+                        "User not found against email = {%s}",
+                        email
+                    )
                 );
             }
 
@@ -101,12 +103,12 @@ public class UserService {
 
         } catch (IllegalArgumentException ex) {
             throw new InvalidUserIdException(
-                    HttpStatus.BAD_REQUEST,
-                    String.format(
-                            "Email id {%s} is not Valid",
-                            email
-                    ),
-                    ex
+                HttpStatus.BAD_REQUEST,
+                String.format(
+                    "Email id {%s} is not Valid",
+                    email
+                ),
+                ex
             );
         }
     }

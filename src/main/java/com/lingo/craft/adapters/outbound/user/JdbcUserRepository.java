@@ -54,20 +54,10 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     @Transactional
-    public  Optional<UserModel> deleteById(UUID id){
-        var userRecord = dslContext.selectFrom(USER)
-                .where(USER.ID.eq(id))
-                .fetchOne();
-
-        if (Objects.isNull(userRecord)){
-            return Optional.empty();
-        } else{
-            dslContext.deleteFrom(USER)
-                    .where(USER.ID.eq(id))
-                    .execute();
-
-            return Optional.of(userRecordMapper.toUserModel(userRecord));
-        }
+    public void deleteById(UUID id) {
+        dslContext.deleteFrom(USER)
+            .where(USER.ID.eq(id))
+            .execute();
     }
 
 
@@ -75,13 +65,13 @@ public class JdbcUserRepository implements UserRepository {
     @Transactional
     public Optional<UserModel> getByEmailPassword(String email, String password) {
         var userRecord = dslContext.selectFrom(USER)
-                .where(USER.EMAIL.eq(email),USER.PASSWORD.eq(password))
-                .fetchOne();
+            .where(USER.EMAIL.eq(email), USER.PASSWORD.eq(password))
+            .fetchOne();
 
         return Objects.isNull(userRecord) ?
-                Optional.empty() :
-                Optional.of(
-                        userRecordMapper.toUserModel(userRecord)
-                );
+            Optional.empty() :
+            Optional.of(
+                userRecordMapper.toUserModel(userRecord)
+            );
     }
 }

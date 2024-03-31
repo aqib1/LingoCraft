@@ -10,5 +10,5 @@ public interface UserRepository {
     Optional<UserModel> create(UserModel model);
     Optional<UserModel> getById(UUID id);
     Optional<UserModel> getByEmailPassword(String email, String password);
-    Optional<UserModel> deleteById(UUID id);
+    void deleteById(UUID id);
 }
