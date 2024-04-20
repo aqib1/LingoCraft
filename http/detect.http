@@ -1,0 +1,7 @@
+## Create user
+POST {{host}}/detect
+Content-Type: application/json
+
+{
+  "text": "This product is not good. Other companies selling 'pencils' are not good. My name is 'Aqib'"
+}

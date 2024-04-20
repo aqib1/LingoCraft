@@ -69,6 +69,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
   /user/email/{email}/password/{password}:
     get:
       summary: Get a user by email and password.
@@ -139,28 +140,99 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /detect:
+    post:
+      summary: Api to detect language
+      operationId: detectLanguage
+      description: Api to detect a language against a text provided by user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LanguageDetectionRequest'
+      responses:
+        '200':
+          description: Language is detected successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguageDetectionResponse'
+
+        '400':
+          description: Bad request, check request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   schemas:
+    LanguageDetectionRequest:
+      type: object
+      properties:
+        text:
+          type: string
+          description: A text provided by user to detect its language.
+      required:
+        - text
+
+    LanguageDetectionResponse:
+      allOf:
+        - $ref: '#/components/schemas/LanguageDetectionRequest'
+        - type: object
+          properties:
+            languageCode:
+              type: string
+              description: Language ISO-639 code.
+            confidence:
+              type: string
+              description: Language detection confidence.
+              enum:
+                - HIGH
+                - MEDIUM
+                - LOW
+                - NONE
+            rawScore:
+              type: number
+              description: Language detection raw score.
+          required:
+            - languageCode
+            - confidence
+            - rawScore
+
     CreateUserRequest:
       type: object
       properties:
         name:
           type: string
+          description: Name of new user we are aiming to create.
         password:
           type: string
+          description: Password of new user we are aiming to create.
         email:
           type: string
+          description: Email of new user we are aiming to create.
         phone:
           type: string
+          description: Phone of new user we are aiming to create.
         age:
           type: integer
+          description: Age of new user we are aiming to create.
         gender:
           type: string
+          description: Gender of new user we are aiming to create.
           enum:
             - MALE
             - FEMALE
         roleId:
           type: integer
+          description: RoleId of new user we are aiming to create.
       required:
         - name
         - password
@@ -177,6 +249,7 @@ components:
           properties:
             id:
              type: string
+             description: Id of newly created user.
           required:
             - id
 
