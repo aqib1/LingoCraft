@@ -139,8 +139,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /role:
-
 components:
   schemas:
     CreateUserRequest:

@@ -9,17 +9,17 @@ spring:
   jooq:
     sql-dialect = postgres
 
-#db:
-#  url: jdbc:postgresql://localhost:5432/lingo_craft
-#  username: postgres
-#  password: Admin123
-#  driver: org.postgresql.Driver
-
 db:
-  url: jdbc:postgresql://localhost:6432/lingo_craft
-  username: lingo_owner
-  password: lingo_owner
+  url: jdbc:postgresql://localhost:5432/lingo_craft
+  username: postgres
+  password: Admin123
   driver: org.postgresql.Driver
+
+#db:
+#  url: jdbc:postgresql://localhost:6432/lingo_craft
+#  username: lingo_owner
+#  password: lingo_owner
+#  driver: org.postgresql.Driver
 
 eureka:
   client:
