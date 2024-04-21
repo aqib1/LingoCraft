@@ -1,7 +1,18 @@
-## Create user
+### Detect language
 POST {{host}}/detect
 Content-Type: application/json
 
 {
-  "text": "This product is not good. Other companies selling 'pencils' are not good. My name is 'Aqib'"
+  "text": "Hola cómo estás. Estaba desayunando. acabo de despertar"
 }
+
+### Upload file to detect language
+POST {{host}}/detect/upload
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="example.txt"
+
+< ./files/example.txt
+
+--boundary
