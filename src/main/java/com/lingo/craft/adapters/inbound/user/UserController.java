@@ -32,6 +32,7 @@ public class UserController {
             )
         );
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteUserResponse> deleteUserById(
             @PathVariable String id
@@ -42,6 +43,7 @@ public class UserController {
                 )
         );
     }
+
     @GetMapping("/email/{email}/password/{password}")
     public ResponseEntity<GetUserResponse> getByEmailPassword(
             @PathVariable String email,
