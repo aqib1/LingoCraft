@@ -4,8 +4,6 @@ import com.lingo.craft.domain.detection.model.LanguageDetectionModel;
 import com.lingo.craft.domain.detection.util.TikaParserHelper;
 import org.apache.commons.io.FileUtils;
 import org.apache.tika.exception.TikaException;
-import org.apache.tika.language.detect.LanguageDetector;
-import org.apache.tika.language.detect.LanguageResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
@@ -14,54 +12,50 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import static com.lingo.craft.utils.FileHelper.getResourcePath;
-import static com.lingo.craft.utils.FileHelper.isMP3;
+import static com.lingo.craft.utils.LingoHelper.getDisplayLanguage;
+import static com.lingo.craft.utils.LingoHelper.getResourcePath;
 
 @Service
 public class LanguageDetectionService {
-    private final LanguageDetector languageDetector;
 
-    public LanguageDetectionService(LanguageDetector languageDetector) {
-        this.languageDetector = languageDetector;
-    }
-
-    public LanguageDetectionModel detectLanguage(LanguageDetectionModel model) {
+    public LanguageDetectionModel detectLanguage(LanguageDetectionModel model) throws IOException {
+        var tikaParserHelper = new TikaParserHelper();
         return createLanguageDetectionResponse(
-                languageDetector.detect(model.getText()),
+                tikaParserHelper,
                 model.getText()
         );
     }
 
     public LanguageDetectionModel detectLanguageFromFile(MultipartFile multipartFile) throws IOException, TikaException, SAXException {
-        var tempFile = new File(getResourcePath().concat("/").concat(multipartFile.getOriginalFilename()));
+        var tempFile = new File(getResourcePath().concat("/").concat(multipartFile.getName()));
         multipartFile.transferTo(tempFile);
         var tikaParserHelper = new TikaParserHelper();
         try (var inputStream = new FileInputStream(tempFile)) {
-            if(isMP3(multipartFile.getOriginalFilename())) {
-                tikaParserHelper.parseMP3(inputStream);
-            } else {
-                tikaParserHelper.parse(inputStream);
-            }
+            tikaParserHelper.parse(inputStream);
         } finally {
             FileUtils.delete(tempFile);
         }
 
-        var content = tikaParserHelper.getContent();
         return createLanguageDetectionResponse(
-                languageDetector.detect(content),
-                content
+                tikaParserHelper,
+                tikaParserHelper.getContent()
         );
     }
 
     private LanguageDetectionModel createLanguageDetectionResponse(
-            LanguageResult languageResult,
+            TikaParserHelper tikaParserHelper,
             String text
     ) {
+        System.out.println(tikaParserHelper.translate(text, "en"));
+        var languageResult = tikaParserHelper.detectLanguage(text);
+        var languageCode = languageResult.getLanguage();
         return LanguageDetectionModel.builder()
-                .languageCode(languageResult.getLanguage())
+                .languageCode(languageCode)
+                .language(getDisplayLanguage(languageCode))
                 .text(text)
                 .confidence(languageResult.getConfidence())
                 .rawScore(languageResult.getRawScore())
+                .metadata(tikaParserHelper.readMetadata())
                 .build();
     }
 }

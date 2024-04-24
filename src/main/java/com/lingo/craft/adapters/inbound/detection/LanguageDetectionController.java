@@ -28,7 +28,7 @@ public class LanguageDetectionController {
     @PostMapping
     public ResponseEntity<LanguageDetectionResponse> detectLanguage(
             @RequestBody LanguageDetectionRequest languageDetectionRequest
-    ) {
+    ) throws IOException {
         return ResponseEntity.ok(
                 languageDetectionModelMapper.languageDetectionResponse(
                         languageDetectionService.detectLanguage(

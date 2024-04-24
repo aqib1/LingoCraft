@@ -226,6 +226,9 @@ components:
             languageCode:
               type: string
               description: Language ISO-639 code.
+            language:
+              type: string
+              description: Language name.
             confidence:
               type: string
               description: Language detection confidence.
@@ -237,6 +240,10 @@ components:
             rawScore:
               type: number
               description: Language detection raw score.
+            metadata:
+              type: object
+              additionalProperties:
+                type: string
           required:
             - languageCode
             - confidence
