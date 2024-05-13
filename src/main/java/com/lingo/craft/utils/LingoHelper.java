@@ -3,11 +3,15 @@ package com.lingo.craft.utils;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class LingoHelper {
     private static final String SRC_DIR = "src";
     private static final String MAIN_DIR = "main";
     private static final String RESOURCES_DIR = "resources";
+
+    public static final String TASK_CONTENT_SEMANTIC_QUEUE = "TASK_CONTENT_SEMANTIC_QUEUE";
+
     private static final List<String> NOT_ALLOWED_METADATA_KEYS = List.of(
             "X-TIKA:Parsed-By",
             "X-TIKA:Parsed-By-Full-Set"

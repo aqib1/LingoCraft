@@ -3,7 +3,7 @@ POST {{host}}/detect
 Content-Type: application/json
 
 {
-  "text": "Hola cómo estás. Estaba desayunando. acabo de despertar"
+  "text": "This is an excellent book. I enjoy reading it. I can read on Sundays. Today is only Tuesday. Can't wait for next Sunday. The working week is unbearably long. It's awful."
 }
 
 ### Upload file to detect language
