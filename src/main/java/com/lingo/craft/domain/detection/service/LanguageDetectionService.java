@@ -46,7 +46,6 @@ public class LanguageDetectionService {
             TikaParserHelper tikaParserHelper,
             String text
     ) {
-        System.out.println(tikaParserHelper.translate(text, "en"));
         var languageResult = tikaParserHelper.detectLanguage(text);
         var languageCode = languageResult.getLanguage();
         return LanguageDetectionModel.builder()

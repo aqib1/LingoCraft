@@ -1,13 +1,21 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: LingoCraft
   datasource:
-    url: ${db.url}
-    username: ${db.username}
-    password: ${db.password}
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:26257/${DATABASE_NAME:onboarding}${DATABASE_CONNECTION_PARAMS:}
+    username: onb_user
+    password: ${DATABASE_PASSWORD:""}
     driver-class-name: ${db.driver}
   jooq:
     sql-dialect = postgres
+  temporal:
+    namespace: default
+    connection:
+      target: 127.0.0.1:7233
+    workersAutoDiscovery:
+      packages: com.lingo.craft
 
 db:
   url: jdbc:postgresql://localhost:5432/lingo_craft
@@ -21,10 +29,20 @@ db:
 #  password: lingo_owner
 #  driver: org.postgresql.Driver
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-
 server:
   port: 37245
+
+workflows:
+  contentAnalysisEventWorkflow:
+    workflowIdPrefix: CONTENT_PROCESSING_WORKFLOW_
+
+stanfordCore:
+  annotators: "tokenize, ssplit, parse, sentiment"
+
+activities:
+  contentSemanticAnalysis:
+    startToCloseTimeout: 60s
+    initialInterval: 1s
+    maximumAttempts: 0 # unlimited
+    backoffCoefficient: 5.0
+    maximumInterval: 1h

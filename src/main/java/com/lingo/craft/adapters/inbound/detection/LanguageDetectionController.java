@@ -1,6 +1,8 @@
 package com.lingo.craft.adapters.inbound.detection;
 
 import com.lingo.craft.domain.detection.service.LanguageDetectionService;
+import com.lingo.craft.domain.temporal.events.ContentSentimentAnalysisEvent;
+import com.lingo.craft.domain.temporal.service.ContentProcessingService;
 import org.apache.tika.exception.TikaException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +17,16 @@ import java.io.IOException;
 @RequestMapping("/detect")
 public class LanguageDetectionController {
     private final LanguageDetectionService languageDetectionService;
+    private final ContentProcessingService contentProcessingService;
     private final LanguageDetectionModelMapper languageDetectionModelMapper;
 
     public LanguageDetectionController(
             LanguageDetectionService languageDetectionService,
+            ContentProcessingService contentProcessingService,
             LanguageDetectionModelMapper languageDetectionModelMapper
     ) {
         this.languageDetectionService = languageDetectionService;
+        this.contentProcessingService = contentProcessingService;
         this.languageDetectionModelMapper = languageDetectionModelMapper;
     }
 
@@ -29,14 +34,21 @@ public class LanguageDetectionController {
     public ResponseEntity<LanguageDetectionResponse> detectLanguage(
             @RequestBody LanguageDetectionRequest languageDetectionRequest
     ) throws IOException {
-        return ResponseEntity.ok(
-                languageDetectionModelMapper.languageDetectionResponse(
-                        languageDetectionService.detectLanguage(
-                                languageDetectionModelMapper.languageDetectionModel(
-                                        languageDetectionRequest
-                                )
+        var languageDetectionResponse = languageDetectionModelMapper.languageDetectionResponse(
+                languageDetectionService.detectLanguage(
+                        languageDetectionModelMapper.languageDetectionModel(
+                                languageDetectionRequest
                         )
                 )
+        );
+        contentProcessingService.publishContentAnalysisEvents(
+                ContentSentimentAnalysisEvent.builder()
+                        .languageCode(languageDetectionResponse.getLanguageCode())
+                        .text(languageDetectionResponse.getText())
+                        .build()
+        );
+        return ResponseEntity.ok(
+                languageDetectionResponse
         );
     }
 
