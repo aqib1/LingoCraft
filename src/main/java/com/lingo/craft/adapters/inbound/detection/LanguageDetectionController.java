@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/detect")
@@ -41,12 +42,15 @@ public class LanguageDetectionController {
                         )
                 )
         );
+
         contentProcessingService.publishContentAnalysisEvents(
                 ContentSentimentAnalysisEvent.builder()
                         .languageCode(languageDetectionResponse.getLanguageCode())
                         .text(languageDetectionResponse.getText())
+                        .workflowId(UUID.randomUUID().toString())
                         .build()
         );
+
         return ResponseEntity.ok(
                 languageDetectionResponse
         );

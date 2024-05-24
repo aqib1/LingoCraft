@@ -14,4 +14,5 @@ import java.io.Serializable;
 public class ContentSentimentAnalysisEvent implements Serializable {
     private String text;
     private String languageCode;
+    private String workflowId;
 }
