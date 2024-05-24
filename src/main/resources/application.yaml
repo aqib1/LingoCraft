@@ -4,9 +4,9 @@ spring:
   application:
     name: LingoCraft
   datasource:
-    url: jdbc:postgresql://${DATABASE_HOST:localhost}:26257/${DATABASE_NAME:onboarding}${DATABASE_CONNECTION_PARAMS:}
-    username: onb_user
-    password: ${DATABASE_PASSWORD:""}
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
     driver-class-name: ${db.driver}
   jooq:
     sql-dialect = postgres
@@ -20,14 +20,8 @@ spring:
 db:
   url: jdbc:postgresql://localhost:5432/lingo_craft
   username: postgres
-  password: Admin123
+  password:
   driver: org.postgresql.Driver
-
-#db:
-#  url: jdbc:postgresql://localhost:6432/lingo_craft
-#  username: lingo_owner
-#  password: lingo_owner
-#  driver: org.postgresql.Driver
 
 server:
   port: 37245
