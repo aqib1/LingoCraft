@@ -4,6 +4,7 @@
 package com.lingo.craft;
 
 
+import com.lingo.craft.tables.LanguageAnalysis;
 import com.lingo.craft.tables.Role;
 import com.lingo.craft.tables.User;
 
@@ -13,6 +14,11 @@ import com.lingo.craft.tables.User;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>public.language_analysis</code>.
+     */
+    public static final LanguageAnalysis LANGUAGE_ANALYSIS = LanguageAnalysis.LANGUAGE_ANALYSIS;
 
     /**
      * The table <code>public.role</code>.

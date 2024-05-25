@@ -8,16 +8,18 @@ import com.lingo.craft.Keys;
 import com.lingo.craft.Public;
 import com.lingo.craft.tables.records.RoleRecord;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function2;
+import org.jooq.Function3;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row2;
+import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -58,7 +60,12 @@ public class Role extends TableImpl<RoleRecord> {
     /**
      * The column <code>public.role.rolepermissions</code>.
      */
-    public final TableField<RoleRecord, String> ROLEPERMISSIONS = createField(DSL.name("rolepermissions"), SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RoleRecord, String> ROLEPERMISSIONS = createField(DSL.name("rolepermissions"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+
+    /**
+     * The column <code>public.role.userid</code>.
+     */
+    public final TableField<RoleRecord, UUID> USERID = createField(DSL.name("userid"), SQLDataType.UUID.nullable(false), this, "");
 
     private Role(Name alias, Table<RoleRecord> aliased) {
         this(alias, aliased, null);
@@ -104,6 +111,23 @@ public class Role extends TableImpl<RoleRecord> {
     }
 
     @Override
+    public List<ForeignKey<RoleRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.ROLE__USERID);
+    }
+
+    private transient User _user;
+
+    /**
+     * Get the implicit join path to the <code>public.user</code> table.
+     */
+    public User user() {
+        if (_user == null)
+            _user = new User(this, Keys.ROLE__USERID);
+
+        return _user;
+    }
+
+    @Override
     public Role as(String alias) {
         return new Role(DSL.name(alias), this);
     }
@@ -143,18 +167,18 @@ public class Role extends TableImpl<RoleRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row2 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<UUID, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Row3<UUID, String, UUID> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function2<? super UUID, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function3<? super UUID, ? super String, ? super UUID, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -162,7 +186,7 @@ public class Role extends TableImpl<RoleRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super UUID, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super UUID, ? super String, ? super UUID, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

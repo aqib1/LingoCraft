@@ -4,11 +4,14 @@
 package com.lingo.craft;
 
 
+import com.lingo.craft.tables.LanguageAnalysis;
 import com.lingo.craft.tables.Role;
 import com.lingo.craft.tables.User;
+import com.lingo.craft.tables.records.LanguageAnalysisRecord;
 import com.lingo.craft.tables.records.RoleRecord;
 import com.lingo.craft.tables.records.UserRecord;
 
+import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
@@ -26,6 +29,14 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<LanguageAnalysisRecord> LANGUAGE_ANALYSIS_PKEY = Internal.createUniqueKey(LanguageAnalysis.LANGUAGE_ANALYSIS, DSL.name("language_analysis_pkey"), new TableField[] { LanguageAnalysis.LANGUAGE_ANALYSIS.ID }, true);
     public static final UniqueKey<RoleRecord> ROLE_PKEY = Internal.createUniqueKey(Role.ROLE, DSL.name("role_pkey"), new TableField[] { Role.ROLE.ID }, true);
     public static final UniqueKey<UserRecord> USER_PKEY = Internal.createUniqueKey(User.USER, DSL.name("user_pkey"), new TableField[] { User.USER.ID }, true);
+
+    // -------------------------------------------------------------------------
+    // FOREIGN KEY definitions
+    // -------------------------------------------------------------------------
+
+    public static final ForeignKey<LanguageAnalysisRecord, UserRecord> LANGUAGE_ANALYSIS__USERID = Internal.createForeignKey(LanguageAnalysis.LANGUAGE_ANALYSIS, DSL.name("userid"), new TableField[] { LanguageAnalysis.LANGUAGE_ANALYSIS.USERID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
+    public static final ForeignKey<RoleRecord, UserRecord> ROLE__USERID = Internal.createForeignKey(Role.ROLE, DSL.name("userid"), new TableField[] { Role.ROLE.USERID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
 }

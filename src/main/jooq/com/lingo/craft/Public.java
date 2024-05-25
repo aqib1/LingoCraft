@@ -4,6 +4,7 @@
 package com.lingo.craft;
 
 
+import com.lingo.craft.tables.LanguageAnalysis;
 import com.lingo.craft.tables.Role;
 import com.lingo.craft.tables.User;
 
@@ -27,6 +28,11 @@ public class Public extends SchemaImpl {
      * The reference instance of <code>public</code>
      */
     public static final Public PUBLIC = new Public();
+
+    /**
+     * The table <code>public.language_analysis</code>.
+     */
+    public final LanguageAnalysis LANGUAGE_ANALYSIS = LanguageAnalysis.LANGUAGE_ANALYSIS;
 
     /**
      * The table <code>public.role</code>.
@@ -54,6 +60,7 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
+            LanguageAnalysis.LANGUAGE_ANALYSIS,
             Role.ROLE,
             User.USER
         );
