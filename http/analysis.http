@@ -1,13 +1,13 @@
 ### Detect language
-POST {{host}}/detect
+POST {{host}}/analysis
 Content-Type: application/json
 
 {
-  "text": "This is an excellent book. I enjoy reading it. I can read on Sundays. Today is only Tuesday. Can't wait for next Sunday. The working week is unbearably long. It's awful."
+  "text": "This is an excellent product. I bought it yesterday and i liked it so much. It works very well and good quality."
 }
 
 ### Upload file to detect language
-POST {{host}}/detect/upload
+POST {{host}}/analysis/upload
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary

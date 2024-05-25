@@ -1,4 +1,5 @@
 import org.jooq.meta.jaxb.Logging
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     java
@@ -76,7 +77,7 @@ tasks.withType<Test> {
 
 val spec: String = project.file("src/main/resources/api/api-spec.yaml").absolutePath
 val generatedSourcesDir: String = project.file(
-        layout.buildDirectory.dir("generated")
+    layout.buildDirectory.dir("generated")
 ).absolutePath
 val jooqSourceDir: String = "src/main/jooq"
 
@@ -86,18 +87,18 @@ openApiGenerate {
     outputDir = generatedSourcesDir
     modelPackage = "com.diabolocom.release.openapi.model"
     configOptions.set(
-            mapOf(
-                    "dateLibrary" to "java8",
-                    "delegatePattern" to "true",
-                    "library" to "spring-boot",
-                    "useSpringBoot3" to "true",
-                    "useSpringfox" to "false",
-                    "interfaceOnly" to "true",
-                    "modelDocs" to "false",
-                    "apiDocs" to "false",
-                    "modelTests" to "false",
-                    "apiTests" to "false"
-            )
+        mapOf(
+            "dateLibrary" to "java8",
+            "delegatePattern" to "true",
+            "library" to "spring-boot",
+            "useSpringBoot3" to "true",
+            "useSpringfox" to "false",
+            "interfaceOnly" to "true",
+            "modelDocs" to "false",
+            "apiDocs" to "false",
+            "modelTests" to "false",
+            "apiTests" to "false"
+        )
     )
 }
 
@@ -124,10 +125,10 @@ tasks.register("cleanGeneratedFiles") {
     doLast {
         fileTree(generatedSourcesDir).matching {
             include(
-                    "**/org/openapitools/api/**",
-                    "**/.openapi-generator-ignore",
-                    "**/README.md",
-                    "**/pom.xml"
+                "**/org/openapitools/api/**",
+                "**/.openapi-generator-ignore",
+                "**/README.md",
+                "**/pom.xml"
             )
         }.forEach { it.delete() }
         // Delete the empty package directory
@@ -183,4 +184,8 @@ tasks.bootJar {
     destinationDirectory.set(file("docker-dir"))
     archiveFileName.set("lingo_craft.jar")
     enabled = true
+}
+
+tasks.named<BootJar>("bootJar") {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

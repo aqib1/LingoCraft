@@ -140,23 +140,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /detect:
+  /analysis:
     post:
-      summary: Api to detect language
-      operationId: detectLanguage
-      description: Api to detect a language against a text provided by user.
+      summary: Api to perform text analysis
+      operationId: languageAnalysis
+      description: Api to perform an analysis against a text provided by user.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LanguageDetectionRequest'
+              $ref: '#/components/schemas/LanguageAnalysisRequest'
       responses:
         '200':
-          description: Language is detected successfully.
+          description: Language is analysed successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LanguageDetectionResponse'
+                $ref: '#/components/schemas/LanguageAnalysisResponse'
 
         '400':
           description: Bad request, check request payload
@@ -192,7 +192,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LanguageDetectionResponse'
+                $ref: '#/components/schemas/LanguageAnalysisResponse'
 
         '400':
           description: Bad request, check request payload
@@ -209,7 +209,7 @@ paths:
 
 components:
   schemas:
-    LanguageDetectionRequest:
+    LanguageAnalysisRequest:
       type: object
       properties:
         text:
@@ -218,11 +218,14 @@ components:
       required:
         - text
 
-    LanguageDetectionResponse:
+    LanguageAnalysisResponse:
       allOf:
-        - $ref: '#/components/schemas/LanguageDetectionRequest'
+        - $ref: '#/components/schemas/LanguageAnalysisRequest'
         - type: object
           properties:
+            languageAnalysisWorkflowId:
+              type: string
+              description: A temporal workflow id which is used to perform text analysis.
             languageCode:
               type: string
               description: Language ISO-639 code.

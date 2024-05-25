@@ -15,6 +15,7 @@ import java.time.Duration;
 @ConfigurationProperties(prefix = "activities")
 public class ActivityStubsConfiguration {
     private ActivityOptionsConfiguration contentSemanticAnalysis;
+    private ActivityOptionsConfiguration contentSentimentAnalysisPersistence;
 
     @AllArgsConstructor
     @Setter
