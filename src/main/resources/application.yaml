@@ -20,7 +20,7 @@ spring:
 db:
   url: jdbc:postgresql://localhost:5432/lingo_craft
   username: postgres
-  password:
+  password: postgres
   driver: org.postgresql.Driver
 
 server:
