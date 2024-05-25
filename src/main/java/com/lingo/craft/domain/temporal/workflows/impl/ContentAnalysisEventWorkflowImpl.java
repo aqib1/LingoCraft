@@ -1,5 +1,6 @@
 package com.lingo.craft.domain.temporal.workflows.impl;
 
+import com.lingo.craft.domain.temporal.activities.ContentSentimentAnalysisPersistenceActivity;
 import com.lingo.craft.domain.temporal.activities.stub.ActivityStubs;
 import com.lingo.craft.domain.temporal.activities.ContentSentimentAnalysisActivity;
 import com.lingo.craft.domain.temporal.events.ContentSentimentAnalysisEvent;
@@ -11,27 +12,32 @@ import io.temporal.workflow.Workflow;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.lingo.craft.utils.LingoHelper.TASK_CONTENT_SEMANTIC_QUEUE;
+import static com.lingo.craft.utils.LingoHelper.TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE;
 
-@WorkflowImpl(taskQueues = TASK_CONTENT_SEMANTIC_QUEUE)
+@WorkflowImpl(taskQueues = TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE)
 public class ContentAnalysisEventWorkflowImpl implements ContentAnalysisEventWorkflow {
-    private static final String LANGUAGE_PROCESSING_EVENT_PUBLISHING_EXCEPTION = "LANGUAGE_PROCESSING_EVENT_PUBLISHING_EXCEPTION";
-    private final List<ContentSentimentAnalysisEvent> contentAnalysisEvents = new CopyOnWriteArrayList<>();
+    private static final String CONTENT_ANALYSIS_EVENT_PUBLISHING_EXCEPTION = "CONTENT_ANALYSIS_EVENT_PUBLISHING_EXCEPTION";
+    private final List<ContentSentimentAnalysisEvent> contentSentimentAnalysisEvents = new CopyOnWriteArrayList<>();
     private ContentSentimentAnalysisActivity contentSentimentAnalysisActivity;
+    private ContentSentimentAnalysisPersistenceActivity contentSentimentAnalysisPersistenceActivity;
     private boolean exit = false;
+    private String workflowId;
 
     @Override
     public void startWorkflow() {
         try {
-            this.contentSentimentAnalysisActivity = new ActivityStubs().getContentSentimentAnalysisActivity();
-            run();
+            var activityStubs = new ActivityStubs();
+            this.contentSentimentAnalysisActivity = activityStubs.getContentSentimentAnalysisActivity();
+            this.contentSentimentAnalysisPersistenceActivity = activityStubs.getContentSentimentAnalysisPersistenceActivity();
+            this.workflowId = Workflow.getInfo().getRunId();
+            runContentSentimentAnalysisAndPersistWorkflow();
         } catch (Exception exception) {
             throw ApplicationFailure.newFailureWithCause(
                     String.format(
                             "Unexpected exception while executing %s",
                             ContentAnalysisEventWorkflow.class.getName()
                     ),
-                    LANGUAGE_PROCESSING_EVENT_PUBLISHING_EXCEPTION,
+                    CONTENT_ANALYSIS_EVENT_PUBLISHING_EXCEPTION,
                     exception
             );
         }
@@ -39,7 +45,7 @@ public class ContentAnalysisEventWorkflowImpl implements ContentAnalysisEventWor
 
     @Override
     public void publishContentAnalysisEvents(List<ContentSentimentAnalysisEvent> contentAnalysisEvents) {
-        this.contentAnalysisEvents.addAll(contentAnalysisEvents);
+        this.contentSentimentAnalysisEvents.addAll(contentAnalysisEvents);
     }
 
     @Override
@@ -47,15 +53,26 @@ public class ContentAnalysisEventWorkflowImpl implements ContentAnalysisEventWor
         exit = true;
     }
 
-    private void run() {
+    @Override
+    public String getWorkflowId() {
+        return this.workflowId;
+    }
+
+    private void runContentSentimentAnalysisAndPersistWorkflow() {
         while (true) {
-            Workflow.await(() -> !contentAnalysisEvents.isEmpty() || exit);
-            if (contentAnalysisEvents.isEmpty() && exit) {
+            Workflow.await(() -> !contentSentimentAnalysisEvents.isEmpty() || exit);
+            if (contentSentimentAnalysisEvents.isEmpty() && exit) {
                 return;
             }
-            var immutableEventList = contentAnalysisEvents.stream().toList();
-            contentAnalysisEvents.clear();
-            contentSentimentAnalysisActivity.publishContentSentimentEvents(immutableEventList);
+            var immutableEventList = contentSentimentAnalysisEvents.stream().toList();
+            contentSentimentAnalysisEvents.clear();
+            var accumulatedContentAnalysisEvent = contentSentimentAnalysisActivity.publishContentSentimentEvents(
+                    workflowId,
+                    immutableEventList
+            );
+            contentSentimentAnalysisPersistenceActivity.contentSentimentAnalysisPersistenceEvents(
+                    accumulatedContentAnalysisEvent
+            );
         }
     }
 }

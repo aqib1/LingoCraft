@@ -10,7 +10,8 @@ import java.util.Map;
 @Getter
 @Setter
 @Builder
-public class LanguageDetectionModel {
+public class LanguageAnalysisModel {
+    private String languageAnalysisWorkflowId;
     private String text;
     private String languageCode;
     private String language;

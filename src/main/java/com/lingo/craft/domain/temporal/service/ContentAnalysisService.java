@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
-import static com.lingo.craft.utils.LingoHelper.TASK_CONTENT_SEMANTIC_QUEUE;
+import static com.lingo.craft.utils.LingoHelper.TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE;
 
 @Service
-public class ContentProcessingService {
+public class ContentAnalysisService {
     private final WorkflowClient workflowClient;
     private final WorkflowsConfiguration configuration;
 
-    public ContentProcessingService(
+    public ContentAnalysisService(
             WorkflowClient workflowClient,
             WorkflowsConfiguration configuration
     ) {
@@ -25,19 +25,20 @@ public class ContentProcessingService {
         this.configuration = configuration;
     }
 
-    public void publishContentAnalysisEvents(
+    public String publishContentAnalysisEvents(
             ContentSentimentAnalysisEvent event
     ) {
-        publishContentAnalysisEvents(List.of(event));
+        return publishContentAnalysisEvents(List.of(event));
     }
 
-    public void publishContentAnalysisEvents(
+    public String publishContentAnalysisEvents(
             List<ContentSentimentAnalysisEvent> events
     ) {
         var contentAnalysisEventWorkflow = initContentAnalysisEventWorkflow();
-
+        var workflowId = contentAnalysisEventWorkflow.getWorkflowId();
         contentAnalysisEventWorkflow.publishContentAnalysisEvents(events);
         contentAnalysisEventWorkflow.exist();
+        return workflowId;
     }
 
     private ContentAnalysisEventWorkflow initContentAnalysisEventWorkflow() {
@@ -47,7 +48,7 @@ public class ContentProcessingService {
                         .setWorkflowId(configuration.getContentAnalysisEventWorkflow()
                                 .getWorkflowIdPrefix()
                                 .concat(UUID.randomUUID().toString()))
-                        .setTaskQueue(TASK_CONTENT_SEMANTIC_QUEUE)
+                        .setTaskQueue(TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE)
                         .build()
         );
 
