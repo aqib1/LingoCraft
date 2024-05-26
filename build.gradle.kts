@@ -156,14 +156,8 @@ jooq {
                     driver = "org.postgresql.Driver"
                     url = "jdbc:postgresql://localhost:5432/lingo_craft"
                     user = "postgres"
-                    password = "Admin123"
+                    password = "postgres"
                 }
-//                jdbc.apply {
-//                    driver = "org.postgresql.Driver"
-//                    url = "jdbc:postgresql://localhost:6432/lingo_craft"
-//                    user = "lingo_read"
-//                    password = "lingo_read"
-//                }
                 generator.apply {
                     database.apply {
                         inputSchema = "public"

@@ -13,11 +13,11 @@ import java.util.UUID;
 import static com.lingo.craft.utils.LingoHelper.TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE;
 
 @Service
-public class ContentAnalysisService {
+public class ContentAnalysisWorkflowService {
     private final WorkflowClient workflowClient;
     private final WorkflowsConfiguration configuration;
 
-    public ContentAnalysisService(
+    public ContentAnalysisWorkflowService(
             WorkflowClient workflowClient,
             WorkflowsConfiguration configuration
     ) {
@@ -26,22 +26,31 @@ public class ContentAnalysisService {
     }
 
     public String publishContentAnalysisEvents(
+            String userId,
             ContentSentimentAnalysisEvent event
     ) {
-        return publishContentAnalysisEvents(List.of(event));
+        return publishContentAnalysisEvents(
+                userId,
+                List.of(event)
+        );
     }
 
     public String publishContentAnalysisEvents(
+            String userId,
             List<ContentSentimentAnalysisEvent> events
     ) {
-        var contentAnalysisEventWorkflow = initContentAnalysisEventWorkflow();
+        var contentAnalysisEventWorkflow = initContentAnalysisEventWorkflow(
+                userId
+        );
         var workflowId = contentAnalysisEventWorkflow.getWorkflowId();
         contentAnalysisEventWorkflow.publishContentAnalysisEvents(events);
         contentAnalysisEventWorkflow.exist();
         return workflowId;
     }
 
-    private ContentAnalysisEventWorkflow initContentAnalysisEventWorkflow() {
+    private ContentAnalysisEventWorkflow initContentAnalysisEventWorkflow(
+            String userId
+    ) {
         var contentAnalysisEventWorkflow = workflowClient.newWorkflowStub(
                 ContentAnalysisEventWorkflow.class,
                 WorkflowOptions.newBuilder()
@@ -52,7 +61,11 @@ public class ContentAnalysisService {
                         .build()
         );
 
-        WorkflowClient.start(contentAnalysisEventWorkflow::startWorkflow);
+        WorkflowClient.start(
+                contentAnalysisEventWorkflow::startWorkflow,
+                UUID.fromString(userId)
+        );
+
         return contentAnalysisEventWorkflow;
     }
 }

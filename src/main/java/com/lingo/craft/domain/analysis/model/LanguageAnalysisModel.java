@@ -1,9 +1,10 @@
-package com.lingo.craft.domain.detection.model;
+package com.lingo.craft.domain.analysis.model;
 
 import lombok.*;
 import org.apache.tika.language.detect.LanguageConfidence;
 
 import java.util.Map;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,6 +12,7 @@ import java.util.Map;
 @Setter
 @Builder
 public class LanguageAnalysisModel {
+    private String userId;
     private String languageAnalysisWorkflowId;
     private String text;
     private String languageCode;

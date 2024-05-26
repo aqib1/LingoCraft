@@ -1,6 +1,6 @@
-package com.lingo.craft.adapters.inbound.detection;
+package com.lingo.craft.adapters.inbound.analysis;
 
-import com.lingo.craft.domain.detection.model.LanguageAnalysisModel;
+import com.lingo.craft.domain.analysis.model.LanguageAnalysisModel;
 import com.diabolocom.release.openapi.model.LanguageAnalysisRequest;
 import com.diabolocom.release.openapi.model.LanguageAnalysisResponse;
 import org.mapstruct.Mapper;

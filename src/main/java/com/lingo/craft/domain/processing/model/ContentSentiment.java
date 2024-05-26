@@ -1,6 +1,6 @@
 package com.lingo.craft.domain.processing.model;
 
-public enum ContentSentimentScore {
+public enum ContentSentiment {
     VERY_POSITIVE("Very positive"),
     POSITIVE("Positive"),
     NEUTRAL("NEUTRAL"),
@@ -8,17 +8,17 @@ public enum ContentSentimentScore {
     VERY_NEGATIVE("VERY_NEGATIVE");
     final String sentimentName;
 
-    ContentSentimentScore(String sentimentName) {
+    ContentSentiment(String sentimentName) {
         this.sentimentName = sentimentName;
     }
 
-    public static ContentSentimentScore getScore(int score) {
+    public static ContentSentiment getScore(int score) {
         return switch (score) {
-            case 4 -> ContentSentimentScore.VERY_POSITIVE;
-            case 3 -> ContentSentimentScore.POSITIVE;
-            case 2 -> ContentSentimentScore.NEUTRAL;
-            case 1 -> ContentSentimentScore.NEGATIVE;
-            case 0 -> ContentSentimentScore.VERY_NEGATIVE;
+            case 4 -> ContentSentiment.VERY_POSITIVE;
+            case 3 -> ContentSentiment.POSITIVE;
+            case 2 -> ContentSentiment.NEUTRAL;
+            case 1 -> ContentSentiment.NEGATIVE;
+            case 0 -> ContentSentiment.VERY_NEGATIVE;
             default -> throw new IllegalStateException("Unexpected value: " + score);
         };
     }

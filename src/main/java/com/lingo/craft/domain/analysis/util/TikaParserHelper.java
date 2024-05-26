@@ -1,4 +1,4 @@
-package com.lingo.craft.domain.detection.util;
+package com.lingo.craft.domain.analysis.util;
 
 import com.lingo.craft.utils.LingoHelper;
 import org.apache.tika.exception.TikaException;

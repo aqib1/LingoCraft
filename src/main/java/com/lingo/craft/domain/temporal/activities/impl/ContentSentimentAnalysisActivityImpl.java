@@ -1,7 +1,7 @@
 package com.lingo.craft.domain.temporal.activities.impl;
 
-import com.lingo.craft.domain.processing.model.AccumulatedContentAnalysisEvent;
-import com.lingo.craft.domain.processing.service.TextSentimentAnalysisService;
+import com.lingo.craft.domain.sentiment.model.AccumulatedContentSentimentModel;
+import com.lingo.craft.domain.processing.service.ContentSentimentAnalysisService;
 import com.lingo.craft.domain.temporal.activities.ContentSentimentAnalysisActivity;
 import com.lingo.craft.domain.temporal.events.ContentSentimentAnalysisEvent;
 import io.temporal.spring.boot.ActivityImpl;
@@ -14,18 +14,18 @@ import static com.lingo.craft.utils.LingoHelper.TASK_CONTENT_SEMANTIC_ANALYSIS_Q
 @Component
 @ActivityImpl(taskQueues = TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE)
 public class ContentSentimentAnalysisActivityImpl implements ContentSentimentAnalysisActivity {
-    private final TextSentimentAnalysisService textSentimentAnalysisService;
+    private final ContentSentimentAnalysisService contentSentimentAnalysisService;
 
-    public ContentSentimentAnalysisActivityImpl(TextSentimentAnalysisService textSentimentAnalysisService) {
-        this.textSentimentAnalysisService = textSentimentAnalysisService;
+    public ContentSentimentAnalysisActivityImpl(ContentSentimentAnalysisService contentSentimentAnalysisService) {
+        this.contentSentimentAnalysisService = contentSentimentAnalysisService;
     }
 
     @Override
-    public AccumulatedContentAnalysisEvent publishContentSentimentEvents(
+    public AccumulatedContentSentimentModel publishContentSentimentEvents(
             String workflowId,
             List<ContentSentimentAnalysisEvent> contentAnalysisEvents
     ) {
-        return textSentimentAnalysisService.sentimentAnalysis(
+        return contentSentimentAnalysisService.sentimentAnalysis(
                 workflowId,
                 contentAnalysisEvents
         );

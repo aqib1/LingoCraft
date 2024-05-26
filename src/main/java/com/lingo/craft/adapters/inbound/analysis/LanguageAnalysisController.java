@@ -1,6 +1,6 @@
-package com.lingo.craft.adapters.inbound.detection;
+package com.lingo.craft.adapters.inbound.analysis;
 
-import com.lingo.craft.domain.detection.service.LanguageAnalysisService;
+import com.lingo.craft.domain.analysis.service.LanguageAnalysisService;
 import org.apache.tika.exception.TikaException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +37,6 @@ public class LanguageAnalysisController {
                 )
         );
 
-
         return ResponseEntity.ok(
                 languageDetectionResponse
         );
@@ -45,11 +44,15 @@ public class LanguageAnalysisController {
 
     @PostMapping("/upload")
     public ResponseEntity<LanguageAnalysisResponse> languageAnalysisFromFile(
+            @RequestParam("userId") String userId,
             @RequestPart("file") MultipartFile multipartFile
     ) throws IOException, TikaException, SAXException {
         return ResponseEntity.ok(
                 languageAnalysisModelMapper.toLanguageAnalysisResponse(
-                        languageAnalysisService.detectLanguageFromFile(multipartFile)
+                        languageAnalysisService.detectLanguageFromFile(
+                                userId,
+                                multipartFile
+                        )
                 )
         );
     }
