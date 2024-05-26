@@ -1,11 +1,15 @@
-package com.lingo.craft.domain.detection.service;
+package com.lingo.craft.domain.analysis.service;
 
-import com.lingo.craft.domain.detection.model.LanguageAnalysisModel;
-import com.lingo.craft.domain.detection.util.TikaParserHelper;
+import com.lingo.craft.domain.analysis.exception.LanguageAnalysisFailure;
+import com.lingo.craft.domain.analysis.model.LanguageAnalysisModel;
+import com.lingo.craft.domain.analysis.util.TikaParserHelper;
 import com.lingo.craft.domain.temporal.events.ContentSentimentAnalysisEvent;
-import com.lingo.craft.domain.temporal.service.ContentAnalysisService;
+import com.lingo.craft.domain.temporal.service.ContentAnalysisWorkflowService;
+import com.lingo.craft.domain.user.exception.UserNotFoundException;
+import com.lingo.craft.domain.user.service.UserService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tika.exception.TikaException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
@@ -19,21 +23,27 @@ import static com.lingo.craft.utils.LingoHelper.getResourcePath;
 
 @Service
 public class LanguageAnalysisService {
-    private final ContentAnalysisService contentAnalysisService;
+    private final ContentAnalysisWorkflowService contentAnalysisWorkflowService;
+    private final UserService userService;
 
-    public LanguageAnalysisService(ContentAnalysisService contentAnalysisService) {
-        this.contentAnalysisService = contentAnalysisService;
+    public LanguageAnalysisService(
+            ContentAnalysisWorkflowService contentAnalysisWorkflowService,
+            UserService userService
+    ) {
+        this.contentAnalysisWorkflowService = contentAnalysisWorkflowService;
+        this.userService = userService;
     }
 
     public LanguageAnalysisModel detectLanguage(LanguageAnalysisModel model) throws IOException {
         var tikaParserHelper = new TikaParserHelper();
         return createLanguageAnalysisModel(
                 tikaParserHelper,
-                model.getText()
+                model.getText(),
+                model.getUserId()
         );
     }
 
-    public LanguageAnalysisModel detectLanguageFromFile(MultipartFile multipartFile) throws IOException, TikaException, SAXException {
+    public LanguageAnalysisModel detectLanguageFromFile(String userId, MultipartFile multipartFile) throws IOException, TikaException, SAXException {
         var tempFile = new File(getResourcePath().concat("/").concat(multipartFile.getName()));
         multipartFile.transferTo(tempFile);
         var tikaParserHelper = new TikaParserHelper();
@@ -45,17 +55,34 @@ public class LanguageAnalysisService {
 
         return createLanguageAnalysisModel(
                 tikaParserHelper,
-                tikaParserHelper.getContent()
+                tikaParserHelper.getContent(),
+                userId
         );
+    }
+
+    private void isValidUser(String userId) {
+        try {
+            userService.getUserById(userId);
+        } catch (UserNotFoundException ex) {
+            throw new LanguageAnalysisFailure(
+                    HttpStatus.BAD_REQUEST,
+                    "Language analysis failed as there is no such user",
+                    ex
+            );
+        }
     }
 
     private LanguageAnalysisModel createLanguageAnalysisModel(
             TikaParserHelper tikaParserHelper,
-            String text
+            String text,
+            String userId
     ) {
+        isValidUser(userId);
+
         var languageResult = tikaParserHelper.detectLanguage(text);
         var languageCode = languageResult.getLanguage();
         var languageAnalysisModel = LanguageAnalysisModel.builder()
+                .userId(userId)
                 .languageCode(languageCode)
                 .language(getDisplayLanguage(languageCode))
                 .text(text)
@@ -71,8 +98,11 @@ public class LanguageAnalysisService {
         return languageAnalysisModel;
     }
 
-    private String publishContentAnalysisEvents(LanguageAnalysisModel languageAnalysisModel) {
-        return contentAnalysisService.publishContentAnalysisEvents(
+    private String publishContentAnalysisEvents(
+            LanguageAnalysisModel languageAnalysisModel
+    ) {
+        return contentAnalysisWorkflowService.publishContentAnalysisEvents(
+                languageAnalysisModel.getUserId(),
                 ContentSentimentAnalysisEvent.builder()
                         .languageCode(languageAnalysisModel.getLanguageCode())
                         .text(languageAnalysisModel.getText())

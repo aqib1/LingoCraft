@@ -142,7 +142,7 @@ paths:
 
   /analysis:
     post:
-      summary: Api to perform text analysis
+      summary: Api to perform text analysis.
       operationId: languageAnalysis
       description: Api to perform an analysis against a text provided by user.
       requestBody:
@@ -171,11 +171,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /detect/upload:
+  /analysis/upload:
     post:
-      summary: Api to detect language from file
-      operationId: detectLanguageFromFile
-      description: Upload file with content to detect language
+      summary: Api to analysis text from file.
+      operationId: languageAnalysisFromFile
+      description: Upload file with content to detect language.
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          description: User id need to pass in url query.
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -207,16 +214,62 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /sentiment:
+    get:
+      summary: Api to get content sentiment stats
+      operationId: getSentimentStats
+      description: Api to get content sentiments against provided workflowId.
+      parameters:
+        - in: query
+          name: workflowId
+          description: Workflow id which is created and returned during content analysis.
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: userId
+          description: This will be our registered user id who is using our api.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Content sentiment stats provided successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentSentimentResponse'
+
+        '400':
+          description: Bad request, check request payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
 components:
   schemas:
     LanguageAnalysisRequest:
       type: object
       properties:
+        userId:
+          type: string
+          description: Id of user requesting language analysis.
         text:
           type: string
           description: A text provided by user to detect its language.
       required:
         - text
+        - userId
 
     LanguageAnalysisResponse:
       allOf:
@@ -313,3 +366,76 @@ components:
         errorMessage:
           type: string
           description: Error message details.
+
+    ContentSentimentResponse:
+      type: object
+      properties:
+        workflowId:
+          type: string
+          format: uuid
+          description: Current workflow id. This id is a UUID.
+        userId:
+          type: string
+          format: uuid
+          description: Registered user id. This id is a UUID.
+        accumulatedContentSentimentScore:
+          type: integer
+          description: | 
+            An accumulated sentiment score calculated against provided contents.
+            The value of sentiment score will be in between 0 - 4,
+            0 - Zero means provided content means very negative, as content have negative sentiment.
+            1 - One means provided content is negative, as content have negative sentiment.
+            2 - Two means provided content is neutral, as content have neutral sentiment.
+            3 - Three means provided content is positive, as content have positive sentiment.
+            4 - Four means provided content is very positive, as content have very positive sentiment.
+        positiveSentimentPercentage:
+          type: string
+          description: | 
+            This is the percentage of a content positive sentiment. For example if value 65% its 
+            means content is 65 percent positive.
+        accumulatedContentSentiment:
+          type: string
+          enum:
+            - VERY_POSITIVE
+            - POSITIVE
+            - NEUTRAL
+            - NEGATIVE
+            - VERY_NEGATIVE
+          description:  An accumulated sentiment value in string representation.
+        contentSentimentAnalysisModels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentSentimentAnalysisModel'
+      required:
+        - userId
+        - accumulatedContentSentiment
+        - positiveSentimentPercentage
+        - accumulatedContentSentimentScore
+        - contentSentimentAnalysisModels
+        - workflowId
+
+    ContentSentimentAnalysisModel:
+      properties:
+        text:
+          type: string
+          description: Content which is given for sentiment analysis.
+        languageCode:
+          type: string
+          description: Detected content language code.
+        sentimentScore:
+          type: integer
+          description: | 
+            Sentiment score for provided content. The value of sentiment score will be in between 0 - 4,
+            0 - Zero means provided content means very negative, as content have negative sentiment.
+            1 - One means provided content is negative, as content have negative sentiment.
+            2 - Two means provided content is neutral, as content have neutral sentiment.
+            3 - Three means provided content is positive, as content have positive sentiment.
+            4 - Four means provided content is very positive, as content have very positive sentiment.
+        sentimentName:
+          type: string
+          description:  An sentiment value in string representation.
+      required:
+        - languageCode
+        - sentimentName
+        - text
+        - sentimentScore

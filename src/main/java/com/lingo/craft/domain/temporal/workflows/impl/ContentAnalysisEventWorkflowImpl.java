@@ -10,6 +10,7 @@ import io.temporal.spring.boot.WorkflowImpl;
 import io.temporal.workflow.Workflow;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.lingo.craft.utils.LingoHelper.TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE;
@@ -22,10 +23,12 @@ public class ContentAnalysisEventWorkflowImpl implements ContentAnalysisEventWor
     private ContentSentimentAnalysisPersistenceActivity contentSentimentAnalysisPersistenceActivity;
     private boolean exit = false;
     private String workflowId;
+    private UUID userId;
 
     @Override
-    public void startWorkflow() {
+    public void startWorkflow(UUID userId) {
         try {
+            this.userId = userId;
             var activityStubs = new ActivityStubs();
             this.contentSentimentAnalysisActivity = activityStubs.getContentSentimentAnalysisActivity();
             this.contentSentimentAnalysisPersistenceActivity = activityStubs.getContentSentimentAnalysisPersistenceActivity();
@@ -66,12 +69,14 @@ public class ContentAnalysisEventWorkflowImpl implements ContentAnalysisEventWor
             }
             var immutableEventList = contentSentimentAnalysisEvents.stream().toList();
             contentSentimentAnalysisEvents.clear();
-            var accumulatedContentAnalysisEvent = contentSentimentAnalysisActivity.publishContentSentimentEvents(
+            var accumulatedContentAnalysis = contentSentimentAnalysisActivity.publishContentSentimentEvents(
                     workflowId,
                     immutableEventList
             );
+
+            accumulatedContentAnalysis.setUserId(userId);
             contentSentimentAnalysisPersistenceActivity.contentSentimentAnalysisPersistenceEvents(
-                    accumulatedContentAnalysisEvent
+                    accumulatedContentAnalysis
             );
         }
     }

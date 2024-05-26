@@ -7,7 +7,6 @@ import com.lingo.craft.domain.user.exception.UserNotFoundException;
 import com.lingo.craft.domain.user.model.UserModel;
 import com.lingo.craft.domain.user.ports.outbound.UserRepository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.jooq.exception.DataAccessException;
@@ -30,24 +29,22 @@ public class UserService {
 
             if (optionalUser.isEmpty()) {
                 throw new UserNotFoundException(
-                    HttpStatus.NOT_FOUND,
-                    String.format(
-                        "User not found against id = {%s}",
-                        id
-                    )
+                        HttpStatus.NOT_FOUND,
+                        String.format(
+                                "User not found against id = {%s}",
+                                id
+                        )
                 );
             }
-
             return optionalUser.get();
-
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             throw new InvalidUserIdException(
-                HttpStatus.BAD_REQUEST,
-                String.format(
-                    "User id {%s} is not in UUID format",
-                    id
-                ),
-                ex
+                    HttpStatus.BAD_REQUEST,
+                    String.format(
+                            "User id {%s} is not in UUID format",
+                            id
+                    ),
+                    ex
             );
         }
     }
@@ -62,24 +59,24 @@ public class UserService {
                 userRepository.deleteById(uuid);
             } catch (DataAccessException exception) {
                 throw new UserDeletionException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    String.format(
-                        "User deletion failed against id = {%s}",
-                        id
-                    ),
-                    exception
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        String.format(
+                                "User deletion failed against id = {%s}",
+                                id
+                        ),
+                        exception
                 );
             }
 
             return existingUser;
         } catch (IllegalArgumentException ex) {
             throw new InvalidUserIdException(
-                HttpStatus.BAD_REQUEST,
-                String.format(
-                    "User id {%s} is not in UUID format",
-                    id
-                ),
-                ex
+                    HttpStatus.BAD_REQUEST,
+                    String.format(
+                            "User id {%s} is not in UUID format",
+                            id
+                    ),
+                    ex
             );
         }
     }
@@ -91,11 +88,11 @@ public class UserService {
 
             if (optionalUser.isEmpty()) {
                 throw new UserNotFoundException(
-                    HttpStatus.NOT_FOUND,
-                    String.format(
-                        "User not found against email = {%s}",
-                        email
-                    )
+                        HttpStatus.NOT_FOUND,
+                        String.format(
+                                "User not found against email = {%s}",
+                                email
+                        )
                 );
             }
 
@@ -103,12 +100,12 @@ public class UserService {
 
         } catch (IllegalArgumentException ex) {
             throw new InvalidUserIdException(
-                HttpStatus.BAD_REQUEST,
-                String.format(
-                    "Email id {%s} is not Valid",
-                    email
-                ),
-                ex
+                    HttpStatus.BAD_REQUEST,
+                    String.format(
+                            "Email id {%s} is not Valid",
+                            email
+                    ),
+                    ex
             );
         }
     }
@@ -118,8 +115,8 @@ public class UserService {
 
         if (optionalUser.isEmpty()) {
             throw new UserCreationException(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "Error while creating user in database"
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Error while creating user in database"
             );
         }
         return optionalUser.get();

@@ -53,16 +53,18 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
     }
 
     /**
-     * Setter for <code>public.language_analysis.accumulatedcontentscore</code>.
+     * Setter for
+     * <code>public.language_analysis.accumulatedcontentsentimentscore</code>.
      */
-    public void setAccumulatedcontentscore(Integer value) {
+    public void setAccumulatedcontentsentimentscore(Integer value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>public.language_analysis.accumulatedcontentscore</code>.
+     * Getter for
+     * <code>public.language_analysis.accumulatedcontentsentimentscore</code>.
      */
-    public Integer getAccumulatedcontentscore() {
+    public Integer getAccumulatedcontentsentimentscore() {
         return (Integer) get(2);
     }
 
@@ -84,17 +86,17 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     /**
      * Setter for
-     * <code>public.language_analysis.accumulatedcontentsentimentscore</code>.
+     * <code>public.language_analysis.accumulatedcontentsentiment</code>.
      */
-    public void setAccumulatedcontentsentimentscore(String value) {
+    public void setAccumulatedcontentsentiment(String value) {
         set(4, value);
     }
 
     /**
      * Getter for
-     * <code>public.language_analysis.accumulatedcontentsentimentscore</code>.
+     * <code>public.language_analysis.accumulatedcontentsentiment</code>.
      */
-    public String getAccumulatedcontentsentimentscore() {
+    public String getAccumulatedcontentsentiment() {
         return (String) get(4);
     }
 
@@ -149,7 +151,7 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     @Override
     public Field<Integer> field3() {
-        return LanguageAnalysis.LANGUAGE_ANALYSIS.ACCUMULATEDCONTENTSCORE;
+        return LanguageAnalysis.LANGUAGE_ANALYSIS.ACCUMULATEDCONTENTSENTIMENTSCORE;
     }
 
     @Override
@@ -159,7 +161,7 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     @Override
     public Field<String> field5() {
-        return LanguageAnalysis.LANGUAGE_ANALYSIS.ACCUMULATEDCONTENTSENTIMENTSCORE;
+        return LanguageAnalysis.LANGUAGE_ANALYSIS.ACCUMULATEDCONTENTSENTIMENT;
     }
 
     @Override
@@ -179,7 +181,7 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     @Override
     public Integer component3() {
-        return getAccumulatedcontentscore();
+        return getAccumulatedcontentsentimentscore();
     }
 
     @Override
@@ -189,7 +191,7 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     @Override
     public String component5() {
-        return getAccumulatedcontentsentimentscore();
+        return getAccumulatedcontentsentiment();
     }
 
     @Override
@@ -209,7 +211,7 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     @Override
     public Integer value3() {
-        return getAccumulatedcontentscore();
+        return getAccumulatedcontentsentimentscore();
     }
 
     @Override
@@ -219,7 +221,7 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     @Override
     public String value5() {
-        return getAccumulatedcontentsentimentscore();
+        return getAccumulatedcontentsentiment();
     }
 
     @Override
@@ -241,7 +243,7 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     @Override
     public LanguageAnalysisRecord value3(Integer value) {
-        setAccumulatedcontentscore(value);
+        setAccumulatedcontentsentimentscore(value);
         return this;
     }
 
@@ -253,7 +255,7 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
 
     @Override
     public LanguageAnalysisRecord value5(String value) {
-        setAccumulatedcontentsentimentscore(value);
+        setAccumulatedcontentsentiment(value);
         return this;
     }
 
@@ -288,14 +290,14 @@ public class LanguageAnalysisRecord extends UpdatableRecordImpl<LanguageAnalysis
     /**
      * Create a detached, initialised LanguageAnalysisRecord
      */
-    public LanguageAnalysisRecord(UUID id, UUID userid, Integer accumulatedcontentscore, String positivesentimentpercentage, String accumulatedcontentsentimentscore, JSONB contentsentimentanalysismodels) {
+    public LanguageAnalysisRecord(UUID id, UUID userid, Integer accumulatedcontentsentimentscore, String positivesentimentpercentage, String accumulatedcontentsentiment, JSONB contentsentimentanalysismodels) {
         super(LanguageAnalysis.LANGUAGE_ANALYSIS);
 
         setId(id);
         setUserid(userid);
-        setAccumulatedcontentscore(accumulatedcontentscore);
-        setPositivesentimentpercentage(positivesentimentpercentage);
         setAccumulatedcontentsentimentscore(accumulatedcontentsentimentscore);
+        setPositivesentimentpercentage(positivesentimentpercentage);
+        setAccumulatedcontentsentiment(accumulatedcontentsentiment);
         setContentsentimentanalysismodels(contentsentimentanalysismodels);
         resetChangedOnNotNull();
     }

@@ -64,9 +64,10 @@ public class LanguageAnalysis extends TableImpl<LanguageAnalysisRecord> {
     public final TableField<LanguageAnalysisRecord, UUID> USERID = createField(DSL.name("userid"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>public.language_analysis.accumulatedcontentscore</code>.
+     * The column
+     * <code>public.language_analysis.accumulatedcontentsentimentscore</code>.
      */
-    public final TableField<LanguageAnalysisRecord, Integer> ACCUMULATEDCONTENTSCORE = createField(DSL.name("accumulatedcontentscore"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<LanguageAnalysisRecord, Integer> ACCUMULATEDCONTENTSENTIMENTSCORE = createField(DSL.name("accumulatedcontentsentimentscore"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column
@@ -76,9 +77,9 @@ public class LanguageAnalysis extends TableImpl<LanguageAnalysisRecord> {
 
     /**
      * The column
-     * <code>public.language_analysis.accumulatedcontentsentimentscore</code>.
+     * <code>public.language_analysis.accumulatedcontentsentiment</code>.
      */
-    public final TableField<LanguageAnalysisRecord, String> ACCUMULATEDCONTENTSENTIMENTSCORE = createField(DSL.name("accumulatedcontentsentimentscore"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<LanguageAnalysisRecord, String> ACCUMULATEDCONTENTSENTIMENT = createField(DSL.name("accumulatedcontentsentiment"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column

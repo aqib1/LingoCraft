@@ -1,6 +1,6 @@
 package com.lingo.craft.domain.temporal.activities;
 
-import com.lingo.craft.domain.processing.model.AccumulatedContentAnalysisEvent;
+import com.lingo.craft.domain.sentiment.model.AccumulatedContentSentimentModel;
 import io.temporal.activity.ActivityInterface;
 
 
@@ -8,6 +8,6 @@ import io.temporal.activity.ActivityInterface;
 public interface ContentSentimentAnalysisPersistenceActivity {
 
     void contentSentimentAnalysisPersistenceEvents(
-            AccumulatedContentAnalysisEvent accumulatedContentAnalysisEvent
+            AccumulatedContentSentimentModel accumulatedContentSentimentModel
     );
 }
