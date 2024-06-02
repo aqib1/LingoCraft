@@ -22,11 +22,9 @@ public class ContentSentimentAnalysisActivityImpl implements ContentSentimentAna
 
     @Override
     public AccumulatedContentSentimentModel publishContentSentimentEvents(
-            String workflowId,
             List<ContentSentimentAnalysisEvent> contentAnalysisEvents
     ) {
         return contentSentimentAnalysisService.sentimentAnalysis(
-                workflowId,
                 contentAnalysisEvents
         );
     }

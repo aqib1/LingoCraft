@@ -47,6 +47,7 @@ dependencies {
     implementation("org.apache.tika:tika-transcribe-aws:2.9.2")
     implementation("io.temporal:temporal-sdk:1.23.1")
     implementation("io.temporal:temporal-spring-boot-autoconfigure-alpha:1.23.1")
+    implementation("com.deepl.api:deepl-java:1.5.0")
     implementation("edu.stanford.nlp:stanford-corenlp:4.5.5")
     implementation("edu.stanford.nlp:stanford-corenlp:4.5.5:models")
     implementation("edu.stanford.nlp:stanford-corenlp:4.5.5:models-english")

@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.lingo.craft.utils.LingoHelper.PERCENTAGE;
 
 @Service
 public class ContentSentimentAnalysisService {
-    private static final String PERCENTAGE = "%";
     private final StanfordCoreNLP stanfordCoreNLP;
 
 
@@ -31,7 +31,6 @@ public class ContentSentimentAnalysisService {
     }
 
     public AccumulatedContentSentimentModel sentimentAnalysis(
-            String workflowId,
             List<ContentSentimentAnalysisEvent> contentAnalysisEvents
     ) {
         try {
@@ -72,7 +71,6 @@ public class ContentSentimentAnalysisService {
 
             return AccumulatedContentSentimentModel.builder()
                     .contentSentimentAnalysisModels(contentSentimentAnalysis)
-                    .workflowId(UUID.fromString(workflowId))
                     .accumulatedContentSentimentScore(averageSentiment)
                     .positiveSentimentPercentage(positiveSentimentPercentage)
                     .accumulatedContentSentiment(

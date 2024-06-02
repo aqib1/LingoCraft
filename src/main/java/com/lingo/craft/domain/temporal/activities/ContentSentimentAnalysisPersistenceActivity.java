@@ -8,6 +8,7 @@ import io.temporal.activity.ActivityInterface;
 public interface ContentSentimentAnalysisPersistenceActivity {
 
     void contentSentimentAnalysisPersistenceEvents(
+            String workflowId,
             AccumulatedContentSentimentModel accumulatedContentSentimentModel
     );
 }

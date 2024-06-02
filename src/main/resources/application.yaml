@@ -30,6 +30,10 @@ workflows:
   contentAnalysisEventWorkflow:
     workflowIdPrefix: CONTENT_PROCESSING_WORKFLOW_
 
+deepl:
+  allowTranslation: true
+  apiKey: 97e14aba-f53c-4d07-8ef2-009f670e7652:fx
+
 stanfordCore:
   annotators: "tokenize, ssplit, parse, sentiment"
 
@@ -40,6 +44,13 @@ activities:
     maximumAttempts: 2
     backoffCoefficient: 5.0
     maximumInterval: 1h
+
+  contentTranslation:
+    startToCloseTimeout: 120s
+    initialInterval: 1s
+    maximumAttempts: 3
+    backoffCoefficient: 5.0
+    maximumInterval: 10m
 
   contentSemanticAnalysis:
     startToCloseTimeout: 60s

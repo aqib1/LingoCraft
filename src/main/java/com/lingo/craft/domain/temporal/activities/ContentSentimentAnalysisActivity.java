@@ -10,7 +10,6 @@ import java.util.List;
 public interface ContentSentimentAnalysisActivity {
 
     AccumulatedContentSentimentModel publishContentSentimentEvents(
-            String workflowId,
             List<ContentSentimentAnalysisEvent> contentAnalysisEvents
     );
 }

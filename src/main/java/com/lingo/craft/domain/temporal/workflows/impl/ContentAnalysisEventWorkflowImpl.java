@@ -1,6 +1,7 @@
 package com.lingo.craft.domain.temporal.workflows.impl;
 
 import com.lingo.craft.domain.temporal.activities.ContentSentimentAnalysisPersistenceActivity;
+import com.lingo.craft.domain.temporal.activities.ContentTranslationActivity;
 import com.lingo.craft.domain.temporal.activities.stub.ActivityStubs;
 import com.lingo.craft.domain.temporal.activities.ContentSentimentAnalysisActivity;
 import com.lingo.craft.domain.temporal.events.ContentSentimentAnalysisEvent;
@@ -20,6 +21,7 @@ public class ContentAnalysisEventWorkflowImpl implements ContentAnalysisEventWor
     private static final String CONTENT_ANALYSIS_EVENT_PUBLISHING_EXCEPTION = "CONTENT_ANALYSIS_EVENT_PUBLISHING_EXCEPTION";
     private final List<ContentSentimentAnalysisEvent> contentSentimentAnalysisEvents = new CopyOnWriteArrayList<>();
     private ContentSentimentAnalysisActivity contentSentimentAnalysisActivity;
+    private ContentTranslationActivity contentTranslationActivity;
     private ContentSentimentAnalysisPersistenceActivity contentSentimentAnalysisPersistenceActivity;
     private boolean exit = false;
     private String workflowId;
@@ -32,6 +34,7 @@ public class ContentAnalysisEventWorkflowImpl implements ContentAnalysisEventWor
             var activityStubs = new ActivityStubs();
             this.contentSentimentAnalysisActivity = activityStubs.getContentSentimentAnalysisActivity();
             this.contentSentimentAnalysisPersistenceActivity = activityStubs.getContentSentimentAnalysisPersistenceActivity();
+            this.contentTranslationActivity = activityStubs.getContentTranslationActivity();
             this.workflowId = Workflow.getInfo().getRunId();
             runContentSentimentAnalysisAndPersistWorkflow();
         } catch (Exception exception) {
@@ -69,13 +72,16 @@ public class ContentAnalysisEventWorkflowImpl implements ContentAnalysisEventWor
             }
             var immutableEventList = contentSentimentAnalysisEvents.stream().toList();
             contentSentimentAnalysisEvents.clear();
+
+            immutableEventList = contentTranslationActivity.translateContent(immutableEventList);
+
             var accumulatedContentAnalysis = contentSentimentAnalysisActivity.publishContentSentimentEvents(
-                    workflowId,
                     immutableEventList
             );
 
             accumulatedContentAnalysis.setUserId(userId);
             contentSentimentAnalysisPersistenceActivity.contentSentimentAnalysisPersistenceEvents(
+                    workflowId,
                     accumulatedContentAnalysis
             );
         }

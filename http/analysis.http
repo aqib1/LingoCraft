@@ -3,7 +3,7 @@ POST {{host}}/analysis
 Content-Type: application/json
 
 {
-  "text": "This is an excellent product. I bought it yesterday and i liked it so much. It works very well and good quality.",
+  "text": "Chaque matin, je me réveillais avec la douce lueur du soleil.",
   "userId": "6980ed44-4a7f-4b6d-81f0-7eb177c60c1f"
 }
 

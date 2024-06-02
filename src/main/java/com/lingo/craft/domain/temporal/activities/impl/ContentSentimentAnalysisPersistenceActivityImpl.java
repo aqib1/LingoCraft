@@ -21,9 +21,11 @@ public class ContentSentimentAnalysisPersistenceActivityImpl implements ContentS
 
     @Override
     public void contentSentimentAnalysisPersistenceEvents(
+            String workflowId,
             AccumulatedContentSentimentModel accumulatedContentSentimentModel
     ) {
         contentSentimentService.create(
+                workflowId,
                 accumulatedContentSentimentModel
         );
     }
