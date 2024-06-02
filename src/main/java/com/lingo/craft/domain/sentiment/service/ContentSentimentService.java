@@ -40,10 +40,13 @@ public class ContentSentimentService {
     }
 
     public AccumulatedContentSentimentModel create(
+            String workflowId,
             AccumulatedContentSentimentModel accumulatedContentSentimentModel
     ) {
         Optional<AccumulatedContentSentimentModel> created;
+
         try {
+            accumulatedContentSentimentModel.setWorkflowId(UUID.fromString(workflowId));
             created = contentSentimentRepository.create(
                     accumulatedContentSentimentModel
             );

@@ -2,6 +2,7 @@ package com.lingo.craft.domain.temporal.activities.stub;
 
 import com.lingo.craft.domain.temporal.activities.ContentSentimentAnalysisActivity;
 import com.lingo.craft.domain.temporal.activities.ContentSentimentAnalysisPersistenceActivity;
+import com.lingo.craft.domain.temporal.activities.ContentTranslationActivity;
 import com.lingo.craft.domain.temporal.activities.configuration.ActivityStubsConfiguration;
 import com.lingo.craft.domain.temporal.activities.configuration.ActivityStubsConfiguration.ActivityOptionsConfiguration;
 import com.lingo.craft.utils.SpringContext;
@@ -16,6 +17,7 @@ public class ActivityStubs {
     private ActivityOptions contentSemanticAnalysis;
     private ActivityOptions contentSentimentAnalysisPersistence;
     private ContentSentimentAnalysisActivity contentSentimentAnalysisActivity;
+    private ContentTranslationActivity contentTranslationActivity;
     private ContentSentimentAnalysisPersistenceActivity contentSentimentAnalysisPersistenceActivity;
     public ActivityStubs() {
         this.activityStubsConfiguration = SpringContext.getBean(ActivityStubsConfiguration.class);
