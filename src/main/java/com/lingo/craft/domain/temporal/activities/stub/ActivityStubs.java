@@ -16,15 +16,20 @@ public class ActivityStubs {
     private final ActivityStubsConfiguration activityStubsConfiguration;
     private ActivityOptions contentSemanticAnalysis;
     private ActivityOptions contentSentimentAnalysisPersistence;
+    private ActivityOptions contentTranslation;
     private ContentSentimentAnalysisActivity contentSentimentAnalysisActivity;
     private ContentTranslationActivity contentTranslationActivity;
     private ContentSentimentAnalysisPersistenceActivity contentSentimentAnalysisPersistenceActivity;
+
     public ActivityStubs() {
         this.activityStubsConfiguration = SpringContext.getBean(ActivityStubsConfiguration.class);
         initActivities();
     }
 
     private void initActivities() {
+        this.contentTranslation = activityOptions(
+                activityStubsConfiguration.getContentTranslation()
+        );
         this.contentSemanticAnalysis = activityOptions(
                 activityStubsConfiguration.getContentSemanticAnalysis()
         );
@@ -35,6 +40,10 @@ public class ActivityStubs {
         this.contentSentimentAnalysisActivity = Workflow.newActivityStub(
                 ContentSentimentAnalysisActivity.class,
                 contentSemanticAnalysis
+        );
+        this.contentTranslationActivity = Workflow.newActivityStub(
+                ContentTranslationActivity.class,
+                contentTranslation
         );
         this.contentSentimentAnalysisPersistenceActivity = Workflow.newActivityStub(
                 ContentSentimentAnalysisPersistenceActivity.class,

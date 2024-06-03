@@ -8,7 +8,7 @@ public class LingoHelper {
     private static final String SRC_DIR = "src";
     private static final String MAIN_DIR = "main";
     private static final String RESOURCES_DIR = "resources";
-    public static final String EN_LANGUAGE_CODE = "en";
+    public static final String EN_LANGUAGE_CODE = "en-GB";
     public static final String PERCENTAGE = "%";
 
     public static final String TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE = "TASK_CONTENT_SEMANTIC_ANALYSIS_QUEUE";
