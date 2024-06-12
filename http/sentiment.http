@@ -1,2 +1,2 @@
 ### Get sentiment
-GET {{host}}/sentiment?userId=6980ed44-4a7f-4b6d-81f0-7eb177c60c1f&workflowId=11dd80e9-6e97-4f92-b129-5cca06fb58df
+GET {{host}}/sentiment?userId=6980ed44-4a7f-4b6d-81f0-7eb177c60c1f&workflowId=f3e91744-1627-48b3-88c1-fe45d6b0f647
