@@ -1,0 +1,39 @@
+### Language Analysis (positive sentiment)
+POST {{host}}/analysis
+Content-Type: application/json
+
+{
+  "text": "This product exceeded my expectations with its exceptional quality and performance",
+  "userId": "6980ed44-4a7f-4b6d-81f0-7eb177c60c1f"
+}
+
+### Upload file to detect language (positive sentiment)
+POST {{host}}/analysis/upload?userId=6980ed44-4a7f-4b6d-81f0-7eb177c60c1f
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="comments_english_analysis_positive_sentiment.txt"
+
+< ./files/comments_english_analysis_positive_sentiment.txt
+
+--boundary
+
+### Language Analysis (negative sentiment)
+POST {{host}}/analysis
+Content-Type: application/json
+
+{
+  "text": "This product is disappointing and failed to meet my expectations.",
+  "userId": "6980ed44-4a7f-4b6d-81f0-7eb177c60c1f"
+}
+
+### Upload file to detect language (negative sentiment)
+POST {{host}}/analysis/upload?userId=6980ed44-4a7f-4b6d-81f0-7eb177c60c1f
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="comments_english_analysis_negative_sentiment.txt"
+
+< ./files/comments_english_analysis_negative_sentiment.txt
+
+--boundary
